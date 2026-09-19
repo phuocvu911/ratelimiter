@@ -86,7 +86,9 @@ func (l *Limiter) StartCleanup(ctx context.Context, interval time.Duration) {
 			select {
 			case <-ticker.C:
 				deletedIP := l.cleanup()
-				fmt.Printf("Delete rate limiter for %s\n", deletedIP)
+				if len(deletedIP) != 0 {
+					fmt.Printf("Delete rate limiter for %s\n", deletedIP)
+				}
 			case <-ctx.Done():
 				fmt.Println("Janitor unemployed.")
 				return
@@ -97,14 +99,14 @@ func (l *Limiter) StartCleanup(ctx context.Context, interval time.Duration) {
 	}()
 }
 
-func (l *Limiter) cleanup() string {
+func (l *Limiter) cleanup() []string {
 	l.mu.Lock()
 	defer l.mu.Unlock()
 
-	deletedIP := ""
+	deletedIP := []string{}
 	for ip, v := range l.visitors {
 		if time.Since(v.lastSeen) > l.ttl {
-			deletedIP = ip
+			deletedIP = append(deletedIP, ip)
 			delete(l.visitors, ip)
 		}
 	}
