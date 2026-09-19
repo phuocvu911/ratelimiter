@@ -87,7 +87,9 @@ func (l *Limiter) StartCleanup(ctx context.Context, interval time.Duration) {
 			case <-ticker.C:
 				deletedIP := l.cleanup()
 				if len(deletedIP) != 0 {
-					fmt.Printf("Delete rate limiter for %s\n", deletedIP)
+					for _, ip := range deletedIP {
+						fmt.Printf("Delete rate limiter for %s\n", ip)
+					}
 				}
 			case <-ctx.Done():
 				fmt.Println("Janitor unemployed.")
