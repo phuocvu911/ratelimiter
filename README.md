@@ -58,6 +58,7 @@ If the bucket is empty, the middleware writes:
 
 - The limiter identifies clients by the IP extracted from `RemoteAddr`.
 - If `RemoteAddr` is malformed, the limiter falls back to the raw value.
+- It is better to implement `Cleanup` process with server graceful shutdown.
 - The implementation is simple and suitable for API gateways, internal services, or small web applications that need basic per-IP throttling.
 
 ## License
