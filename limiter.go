@@ -95,6 +95,7 @@ func (l *Limiter) StartCleanup(ctx context.Context, interval time.Duration) {
 				fmt.Println("Janitor unemployed.")
 				return
 			case <-l.stopCh:
+				fmt.Println("Janitor fired.")
 				return
 			}
 		}
